@@ -1,0 +1,280 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Մարիամի անակնկալը</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,600&family=Noto+Serif+Armenian:wght@500;600;700&family=Noto+Sans+Armenian:wght@400;500;600;700;800;900&family=Nunito:wght@800;900&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+/* Layout: one centered column — a scratch-off ticket, then a boarding pass that unlocks once the foil is gone. Single lavender look by choice. */
+:root{
+  --bg:#F3EDFB; --bg2:#E6DAF8; --paper:#FFFDF9; --ink:#1B1622; --muted:#5F5770; --line:#E4DAF3;
+  --lav:#CDB8F2; --lav-soft:#EFE8FA; --violet:#4A2D8F; --violet-2:#8B6BD9; --blush:#F6D7E2;
+  --sans:'Noto Sans Armenian','Nunito',system-ui,sans-serif;
+  --serif:'Noto Serif Armenian',Georgia,serif;
+  --mono:'JetBrains Mono',ui-monospace,monospace;
+  --brand:'Nunito','Noto Sans Armenian',system-ui,sans-serif;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html,body{background:var(--bg)}
+body{color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.55;overflow-x:hidden;
+  padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));
+  background:radial-gradient(110% 55% at 50% 0%,#FCFAFF 0%,var(--bg) 55%,var(--bg2) 100%) fixed}
+button{font:inherit;color:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
+:focus-visible{outline:3px solid var(--violet-2);outline-offset:3px}
+h1,h2{margin:0;text-wrap:balance}
+
+.wrap{max-width:480px;margin:0 auto;display:flex;flex-direction:column;align-items:center;gap:40px;padding-block:68px 48px;text-align:center}
+.eyebrow{font-weight:700;font-size:13px;letter-spacing:.2em;text-transform:uppercase;color:var(--violet-2)}
+.head{display:flex;flex-direction:column;gap:12px;align-items:center}
+.h1{font-weight:800;font-size:clamp(30px,8.5vw,42px);line-height:1.2}
+.h1 em{font-style:normal;display:inline-block;margin-top:.22em;background:var(--lav);border-radius:999px;padding:0 .32em .1em;line-height:1.2}
+.sub{margin:0;color:var(--muted);font-weight:500}
+
+/* ---------- Scratch ticket ---------- */
+.ticket{position:relative;width:100%;aspect-ratio:1/1;max-width:100%;border-radius:30px;background:var(--paper);
+  box-shadow:0 40px 70px -40px rgba(46,26,94,.6),0 0 0 1px var(--line);overflow:hidden;user-select:none;-webkit-user-select:none}
+.prize{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:30px;
+  background:radial-gradient(80% 60% at 50% 40%,#FFFFFF 0%,var(--lav-soft) 100%)}
+.prize .plane{width:74px;height:74px;border-radius:50%;background:var(--violet);display:flex;align-items:center;justify-content:center;box-shadow:0 14px 26px -12px rgba(74,45,143,.8)}
+.prize .k{font-weight:700;font-size:15px;letter-spacing:.14em;text-transform:uppercase;color:var(--violet-2)}
+.prize .big{font-weight:900;font-size:clamp(40px,12vw,58px);line-height:1.02;letter-spacing:-.5px}
+.prize .big span{display:block;color:var(--violet)}
+.prize .when{font-family:var(--serif);font-weight:600;font-size:20px;color:var(--muted)}
+.prize .stamp{position:absolute;right:22px;top:22px;transform:rotate(12deg);border:2px dashed var(--violet-2);color:var(--violet-2);border-radius:10px;padding:4px 10px;font-family:var(--mono);font-weight:700;font-size:12px;letter-spacing:.1em}
+#foil{position:absolute;inset:0;width:100%;height:100%;z-index:2;touch-action:none;cursor:grab;transition:opacity .8s ease}
+#foil.gone{opacity:0;pointer-events:none}
+.finger{position:absolute;left:50%;top:76%;width:56px;height:56px;margin-left:-28px;z-index:4;pointer-events:none;animation:swipe 2.2s ease-in-out infinite;transition:opacity .3s}
+.finger.hide{opacity:0;animation:none}
+.meter{width:100%;max-width:260px;display:flex;flex-direction:column;gap:8px;align-items:center}
+.bar{width:100%;height:8px;border-radius:999px;background:#fff;box-shadow:inset 0 0 0 1px var(--line);overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--violet-2),var(--violet));border-radius:999px;transition:width .25s}
+.meter small{font-size:13px;color:var(--muted);font-weight:600;font-variant-numeric:tabular-nums}
+.reveal-all{border:0;background:none;color:var(--violet);font-weight:600;font-size:14px;text-decoration:underline;text-underline-offset:3px;padding:8px}
+
+/* ---------- Boarding pass ---------- */
+.pass-wrap{position:relative;width:100%}
+.pass{width:100%;background:var(--paper);border-radius:24px;box-shadow:0 30px 60px -40px rgba(46,26,94,.6),0 0 0 1px var(--line);text-align:left;overflow:hidden;transition:filter .8s ease}
+.locked .pass{filter:blur(7px) saturate(.6)}
+.lock{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;z-index:2;transition:opacity .5s;font-weight:700}
+.lock span{width:56px;height:56px;border-radius:50%;background:var(--ink);display:flex;align-items:center;justify-content:center}
+.pass-wrap:not(.locked) .lock{opacity:0;pointer-events:none}
+.pass-top{background:var(--violet);color:#fff;padding:16px 22px;display:flex;justify-content:space-between;align-items:center;font-weight:700;font-size:14px;letter-spacing:.08em}
+.pass-top b{font-family:var(--brand);font-weight:900;letter-spacing:.06em}
+.route{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:10px;padding:22px 22px 8px}
+.route .code{font-family:var(--mono);font-weight:700;font-size:clamp(34px,10vw,44px);line-height:1}
+.route .city{font-size:14px;color:var(--muted);font-weight:600;margin-top:4px}
+.route .r{text-align:right}
+.route .mid{display:flex;align-items:center;gap:6px;color:var(--violet-2)}
+.route .mid i{width:22px;border-top:1.5px dashed var(--lav)}
+.fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 16px;padding:14px 22px 20px}
+.fields dt{font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.fields dd{margin:2px 0 0;font-weight:700;font-size:17px}
+.tear{position:relative;border-top:2px dashed var(--line);margin:0 18px}
+.tear::before,.tear::after{content:"";position:absolute;top:-13px;width:24px;height:24px;border-radius:50%;background:var(--bg)}
+.tear::before{left:-30px}.tear::after{right:-30px}
+.stub{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px 22px 22px}
+.barcode{height:52px;flex:1;max-width:220px;background:repeating-linear-gradient(90deg,var(--ink) 0 2px,transparent 2px 4px,var(--ink) 4px 5px,transparent 5px 8px,var(--ink) 8px 11px,transparent 11px 13px)}
+.stub .note{font-family:var(--serif);font-weight:600;font-size:15px;color:var(--violet);text-align:right;line-height:1.35}
+
+footer{display:flex;flex-direction:column;align-items:center;gap:10px;color:var(--muted);font-size:14px}
+.logo{position:relative;width:150px;height:52px;display:flex;align-items:center;justify-content:center}
+.logo svg{position:absolute;inset:0}
+.logo b{position:relative;font-family:var(--brand);font-weight:900;font-size:27px;color:var(--ink);letter-spacing:.5px}
+#confetti{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:45}
+
+@keyframes swipe{0%{transform:translate(-60px,10px) rotate(-12deg);opacity:0}15%{opacity:1}50%{transform:translate(60px,-14px) rotate(8deg)}85%{opacity:1}100%{transform:translate(-60px,10px) rotate(-12deg);opacity:0}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+</style>
+
+<canvas id="confetti" aria-hidden="true"></canvas>
+
+<main class="wrap">
+  <header class="head">
+    <div class="eyebrow">Մարիամ, սա քեզ համար է</div>
+    <h1 class="h1">Քերիր քարտը և իմացիր <em>անակնկալը</em></h1>
+    <p class="sub">Մատով քերիր փայլուն շերտը</p>
+  </header>
+
+  <div class="ticket" id="ticket">
+    <div class="prize" aria-live="polite">
+      <div class="stamp">EVN → CDG</div>
+      <div class="plane"><svg width="36" height="36" viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M21 15.5v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V8.5l-8 5v2l8-2.5V18l-2 1.5V21l3.5-1 3.5 1v-1.5L13 18v-5z"/></svg></div>
+      <div class="k">Պատրաստիր ճամպրուկդ</div>
+      <div class="big">Գնում ենք<span>Փարիզ</span></div>
+      <div class="when">14 – 18 ապրիլ</div>
+    </div>
+    <canvas id="foil" aria-label="Քերվող շերտ"></canvas>
+    <svg class="finger" id="finger" viewBox="0 0 56 56" aria-hidden="true"><circle cx="28" cy="28" r="26" fill="rgba(255,255,255,.35)"/><circle cx="28" cy="28" r="15" fill="#fff" stroke="#4A2D8F" stroke-width="2"/><circle cx="28" cy="28" r="5" fill="#4A2D8F"/></svg>
+  </div>
+
+  <div class="meter">
+    <div class="bar"><i id="barFill"></i></div>
+    <small id="pct">Քերված է 0%</small>
+    <button class="reveal-all" id="revealAll" type="button">Բացել միանգամից</button>
+  </div>
+
+  <div class="pass-wrap locked" id="passWrap">
+    <div class="lock"><span><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></span>Նախ քերիր քարտը</div>
+    <article class="pass" aria-label="Նստեցման տոմս">
+      <div class="pass-top"><span>ՆՍՏԵՑՄԱՆ ՏՈՄՍ</span><b>MUSEO AIR</b></div>
+      <div class="route">
+        <div><div class="code">EVN</div><div class="city">Երևան</div></div>
+        <div class="mid"><i></i><svg width="22" height="22" viewBox="0 0 24 24" fill="#8B6BD9" aria-hidden="true"><path d="M21 15.5v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V8.5l-8 5v2l8-2.5V18l-2 1.5V21l3.5-1 3.5 1v-1.5L13 18v-5z" transform="rotate(90 12 12)"/></svg><i></i></div>
+        <div class="r"><div class="code">CDG</div><div class="city">Փարիզ</div></div>
+      </div>
+      <dl class="fields">
+        <div><dt>Ուղևոր</dt><dd>Մարիամ</dd></div>
+        <div><dt>Ուղեկից</dt><dd>Դավիթ</dd></div>
+        <div><dt>Մեկնում</dt><dd>14 ապրիլ</dd></div>
+        <div><dt>Վերադարձ</dt><dd>18 ապրիլ</dd></div>
+        <div><dt>Նստատեղ</dt><dd>Պատուհանի մոտ</dd></div>
+        <div><dt>Ուղեբեռ</dt><dd>Շատ սեր</dd></div>
+      </dl>
+      <div class="tear"></div>
+      <div class="stub"><div class="barcode" aria-hidden="true"></div><div class="note">Մնում է միայն<br>ճամպրուկը հավաքել</div></div>
+    </article>
+  </div>
+
+  <footer>
+    <div class="logo"><svg viewBox="0 0 230 80" aria-hidden="true"><ellipse cx="112" cy="44" rx="106" ry="22" fill="none" stroke="#8B6BD9" stroke-width="4" stroke-linecap="round" stroke-dasharray="300 176" transform="rotate(-9 112 44)"/><path d="M200 2C201 12 204 15 214 16C204 17 201 20 200 30C199 20 196 17 186 16C196 15 199 12 200 2Z" fill="#8B6BD9"/></svg><b>MUSEO</b></div>
+    Ստեղծված է MUSEO-ի կողմից
+  </footer>
+</main>
+
+<script>
+(function(){
+  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const ticket=document.getElementById('ticket'), foil=document.getElementById('foil'), fx=foil.getContext('2d',{willReadFrequently:true});
+  const finger=document.getElementById('finger'), barFill=document.getElementById('barFill'), pct=document.getElementById('pct'), passWrap=document.getElementById('passWrap');
+  let revealed=false, started=false, last=null, dpr=1, moves=0;
+
+  /* ---------- Draw the foil ---------- */
+  function paintFoil(){
+    dpr=Math.min(2,window.devicePixelRatio||1);
+    const w=ticket.clientWidth, h=ticket.clientHeight;
+    foil.width=w*dpr; foil.height=h*dpr;
+    fx.setTransform(dpr,0,0,dpr,0,0);
+    fx.globalCompositeOperation='source-over';
+    const g=fx.createLinearGradient(0,0,w,h);
+    g.addColorStop(0,'#D9CDEB'); g.addColorStop(.25,'#F4EEFB'); g.addColorStop(.5,'#C6B6E2');
+    g.addColorStop(.72,'#EFE6F7'); g.addColorStop(1,'#BBA8DC');
+    fx.fillStyle=g; fx.fillRect(0,0,w,h);
+    // fine brushed texture
+    for(let i=0;i<1400;i++){fx.fillStyle=Math.random()<.5?'rgba(255,255,255,.35)':'rgba(90,60,150,.08)';fx.fillRect(Math.random()*w,Math.random()*h,1.2,1.2);}
+    // diagonal sheen bands
+    fx.save(); fx.globalAlpha=.35; fx.strokeStyle='#fff'; fx.lineWidth=26;
+    for(let x=-h;x<w;x+=110){fx.beginPath();fx.moveTo(x,h);fx.lineTo(x+h,0);fx.stroke();}
+    fx.restore();
+    // repeating brand pattern
+    fx.save(); fx.fillStyle='rgba(255,255,255,.75)';
+    for(let y=34,row=0;y<h;y+=58,row++) for(let x=(row%2?48:18);x<w;x+=62){
+      const s=3+((x*7+y*3)%5); fx.beginPath(); fx.moveTo(x,y-s*2); fx.quadraticCurveTo(x,y,x+s*2,y); fx.quadraticCurveTo(x,y,x,y+s*2); fx.quadraticCurveTo(x,y,x-s*2,y); fx.quadraticCurveTo(x,y,x,y-s*2); fx.fill(); }
+    fx.restore();
+    fx.save(); fx.fillStyle='rgba(74,45,143,.55)'; fx.font='900 13px Nunito, sans-serif'; fx.textAlign='center';
+    fx.fillText('MUSEO',w/2,30); fx.restore();
+    // center label
+    fx.save(); fx.fillStyle='rgba(255,255,255,.88)';
+    const bw=Math.min(w-60,270), bh=110, bx=(w-bw)/2, by=h/2-bh/2-14;
+    fx.beginPath(); fx.roundRect?fx.roundRect(bx,by,bw,bh,26):fx.rect(bx,by,bw,bh); fx.fill();
+    fx.fillStyle='#4A2D8F'; fx.textAlign='center';
+    fx.font="800 30px 'Noto Sans Armenian', sans-serif"; fx.fillText('Քերիր ինձ',w/2,by+52);
+    fx.fillStyle='#5F5770'; fx.font="600 15px 'Noto Sans Armenian', sans-serif"; fx.fillText('Քեզ անակնկալ է սպասում',w/2,by+82);
+    fx.restore();
+    fx.globalCompositeOperation='destination-out';
+    fx.lineCap='round'; fx.lineJoin='round'; fx.lineWidth=46;
+  }
+
+  /* ---------- Scratch sound (filtered noise) ---------- */
+  let ac=null, noiseGain=null;
+  function initAudio(){
+    if(ac) return;
+    try{
+      ac=new (window.AudioContext||window.webkitAudioContext)();
+      const buf=ac.createBuffer(1,ac.sampleRate,ac.sampleRate), d=buf.getChannelData(0);
+      for(let i=0;i<d.length;i++) d[i]=Math.random()*2-1;
+      const src=ac.createBufferSource(); src.buffer=buf; src.loop=true;
+      const bp=ac.createBiquadFilter(); bp.type='bandpass'; bp.frequency.value=3200; bp.Q.value=.8;
+      noiseGain=ac.createGain(); noiseGain.gain.value=0;
+      src.connect(bp).connect(noiseGain).connect(ac.destination); src.start();
+    }catch(e){ac=null;}
+  }
+  function scratchSound(on){ if(noiseGain) noiseGain.gain.setTargetAtTime(on?.12:0, ac.currentTime, on?.01:.06); }
+  function chime(){
+    if(!ac) return;
+    [72,76,79,84].forEach((n,i)=>{
+      const o=ac.createOscillator(), g=ac.createGain(), t=ac.currentTime+i*.11;
+      o.type='sine'; o.frequency.value=440*Math.pow(2,(n-69)/12);
+      g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(.18,t+.01); g.gain.exponentialRampToValueAtTime(.0001,t+1.6);
+      o.connect(g).connect(ac.destination); o.start(t); o.stop(t+1.7);
+    });
+  }
+
+  /* ---------- Pointer scratching ---------- */
+  function pos(e){const r=foil.getBoundingClientRect();return {x:e.clientX-r.left,y:e.clientY-r.top};}
+  function scratch(a,b){fx.beginPath();fx.moveTo(a.x,a.y);fx.lineTo(b.x,b.y);fx.stroke();}
+  foil.addEventListener('pointerdown',e=>{
+    if(revealed) return;
+    initAudio(); if(ac) ac.resume();
+    foil.setPointerCapture(e.pointerId);
+    last=pos(e); scratch(last,{x:last.x+.1,y:last.y+.1});
+    if(!started){started=true; finger.classList.add('hide');}
+  });
+  foil.addEventListener('pointermove',e=>{
+    if(!last||revealed) return;
+    const p=pos(e); scratch(last,p); last=p; scratchSound(true);
+    if(++moves%6===0) measure();
+  });
+  ['pointerup','pointercancel','pointerleave'].forEach(t=>foil.addEventListener(t,()=>{last=null;scratchSound(false);if(!revealed)measure();}));
+
+  function measure(){
+    const {width:w,height:h}=foil; const data=fx.getImageData(0,0,w,h).data;
+    let clear=0,total=0; const step=24*4;
+    for(let i=3;i<data.length;i+=step){total++; if(data[i]<40) clear++;}
+    const p=Math.round(clear/total*100);
+    barFill.style.width=Math.min(100,Math.round(p/55*100))+'%';
+    pct.textContent='Քերված է '+p+'%';
+    if(p>=55) reveal();
+  }
+
+  /* ---------- Reveal ---------- */
+  function reveal(){
+    if(revealed) return; revealed=true;
+    scratchSound(false); foil.classList.add('gone'); finger.classList.add('hide');
+    barFill.style.width='100%'; pct.textContent='Անակնկալը բացված է';
+    document.getElementById('revealAll').hidden=true;
+    initAudio(); if(ac){ac.resume(); chime();}
+    const r=ticket.getBoundingClientRect();
+    burst(r.left+r.width/2, r.top+r.height*.45, 200);
+    setTimeout(()=>burst(innerWidth*.15,innerHeight*.35,70),300);
+    setTimeout(()=>burst(innerWidth*.85,innerHeight*.35,70),550);
+    setTimeout(()=>passWrap.classList.remove('locked'),700);
+  }
+  document.getElementById('revealAll').addEventListener('click',reveal);
+
+  /* ---------- Confetti ---------- */
+  const cv=document.getElementById('confetti'), cx=cv.getContext('2d'); let parts=[], raf=null;
+  const cols=['#4A2D8F','#8B6BD9','#CDB8F2','#F6D7E2','#FFFFFF','#1B1622','#E9C46A'];
+  function size(){cv.width=innerWidth*devicePixelRatio; cv.height=innerHeight*devicePixelRatio;}
+  function burst(x,y,n){
+    if(reduce) return;
+    for(let i=0;i<n;i++){const a=Math.random()*Math.PI*2, s=4+Math.random()*9;
+      parts.push({x:x*devicePixelRatio,y:y*devicePixelRatio,vx:Math.cos(a)*s,vy:Math.sin(a)*s-7,w:6+Math.random()*8,h:4+Math.random()*6,r:Math.random()*6,vr:(Math.random()-.5)*.3,c:cols[i%cols.length],life:170+Math.random()*80,round:Math.random()<.3});}
+    if(!raf) tick();
+  }
+  function tick(){
+    const d=devicePixelRatio; cx.clearRect(0,0,cv.width,cv.height);
+    parts=parts.filter(p=>p.life-->0&&p.y<cv.height+40);
+    parts.forEach(p=>{p.vy+=.22;p.vx*=.985;p.x+=p.vx*d*.6;p.y+=p.vy*d*.6;p.r+=p.vr;
+      cx.save();cx.translate(p.x,p.y);cx.rotate(p.r);cx.fillStyle=p.c;cx.globalAlpha=Math.min(1,p.life/40);
+      if(p.round){cx.beginPath();cx.arc(0,0,p.w*.45*d,0,7);cx.fill();} else cx.fillRect(-p.w/2*d,-p.h/2*d,p.w*d,p.h*d);
+      cx.restore();});
+    raf=parts.length?requestAnimationFrame(tick):null;
+  }
+
+  size(); addEventListener('resize',()=>{size(); if(!revealed&&!started) paintFoil();});
+  paintFoil();
+  if(document.fonts&&document.fonts.ready) document.fonts.ready.then(()=>{ if(!started&&!revealed) paintFoil(); });
+})();
+</script>
+
+</body></html>
